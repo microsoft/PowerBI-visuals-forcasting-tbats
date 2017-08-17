@@ -1,0 +1,600 @@
+{
+  "dataRoles": [
+    {
+      "displayName": "Date",
+      "description": "Equally spaced date values",
+      "kind": "Grouping",
+      "name": "Date"
+    },
+    {
+      "displayName": "Value",
+      "description": "Numeric variable",
+      "kind": "Measure",
+      "name": "Value"
+    }
+  ],
+  "dataViewMappings": [
+    {
+      "conditions": [
+          { "Date": { "max": 1 }, "Value": { "max": 1 } }
+      ],
+      "scriptResult": {
+        "dataInput": {
+          "table": {
+            "rows": {
+              "select": [
+                { "for": { "in": "Date" } },
+                { "for": { "in": "Value" } }
+              ],
+              "dataReductionAlgorithm": {
+                "top": { }
+              }
+            }
+          }
+        },
+        "script": {
+          "scriptProviderDefault": "R",
+          "scriptOutputType": "html",
+          "source": {
+            "objectName": "rcv_script",
+            "propertyName": "source"
+          },
+          "provider": {
+            "objectName": "rcv_script",
+            "propertyName": "provider"
+          }
+        }
+      }
+    }
+  ],
+  "objects": {
+    "rcv_script": {
+      "properties": {
+        "provider": {
+          "type": { "text": true }
+        },
+        "source": {
+          "type": {
+            "scripting": { "source": true }
+          }
+        }
+      }
+    },
+    "settings_forecastPlot_params": {
+      "displayName": "Forecasting settings",
+      "description": "Basic decomposition models are:  1. Additive: x[t] = Trend + Seasonal + Random, 2. Multiplicative:  x[t] = Trend * Seasonal * Random. Hybrid models are allowed. Any forbiden model combination will be replaced by `Automatic`",
+      "properties": {
+      
+        "forecastLength": { 
+          "displayName": "Forecast length",
+          "description": "Maximal number of data points to predict", 
+          "type": { "numeric": true } 
+          },
+        "targetSeason1": {
+              "displayName": "Seasonal factor #1",
+              "description": "Specify, if time series is influenced by known seasonal factors. Non compatible seasonality will be ignored",
+              "type": {
+                "enumeration": [
+                  {
+                    "displayName": "none",
+                    "value": "none"
+                  },
+                   {
+                    "displayName": "manual",
+                    "value": "manual"
+                  },
+                  {
+                    "displayName": "hour",
+                    "value": "hour"
+                  },
+                  {
+                    "displayName": "day",
+                    "value": "day"
+                  },
+                  {
+                    "displayName": "week",
+                    "value": "week"
+                  },
+                  {
+                    "displayName": "month",
+                    "value": "month"
+                  },
+                  {
+                    "displayName": "quarter",
+                    "value": "quarter"
+                  }, 
+                  {
+                    "displayName": "year",
+                    "value": "year"
+                  }
+                ]
+              }
+            },
+            "targetSeason2": {
+              "displayName": "Seasonal factor #2",
+              "description": "Specify, if time series is influenced by known seasonal factors. Non compatible seasonality will be ignored",
+              "type": {
+                "enumeration": [
+                  {
+                    "displayName": "none",
+                    "value": "none"
+                  },
+                   {
+                    "displayName": "manual",
+                    "value": "manual"
+                  },
+                  {
+                    "displayName": "hour",
+                    "value": "hour"
+                  },
+                  {
+                    "displayName": "day",
+                    "value": "day"
+                  },
+                  {
+                    "displayName": "week",
+                    "value": "week"
+                  },
+                  {
+                    "displayName": "month",
+                    "value": "month"
+                  },
+                  {
+                    "displayName": "quarter",
+                    "value": "quarter"
+                  }, 
+                  {
+                    "displayName": "year",
+                    "value": "year"
+                  }
+                ]
+              }
+            },
+          "freq1": { 
+          "displayName": "Seasonal period #1",
+          "description": "Number of data points in smaller season period. For example, for time series with 15 minutes interval and daily seasonality the value is 96.", 
+          "type": { "numeric": true } 
+          },
+           "freq2": { 
+          "displayName": "Seasonal period #2",
+          "description": "Number of data points in larger season period. For example, for time series with 15 minutes interval and weekly seasonality the value is 672.", 
+          "type": { "numeric": true } 
+          }
+      }
+    }, 
+     "settings_conf_params":{
+        "displayName": "Confidence intervals",
+        "properties": {
+        "confInterval1": {
+          "displayName": "Confidence level",
+          "description": "Select first confidence interval",
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "0",
+                "value": "0"
+              },
+              {
+                "displayName": "0.2",
+                "value": "0.2"
+              },
+              {
+                "displayName": "0.4",
+                "value": "0.4"
+              },
+              {
+                "displayName": "0.5",
+                "value": "0.5"
+              },
+              {
+                "displayName": "0.75",
+                "value": "0.75"
+              },
+              {
+                "displayName": "0.8",
+                "value": "0.8"
+              },
+              {
+                "displayName": "0.9",
+                "value": "0.9"
+              },
+              {
+                "displayName": "0.95",
+                "value": "0.95"
+              },
+              {
+                "displayName": "0.975",
+                "value": "0.975"
+              },
+              {
+                "displayName": "0.98",
+                "value": "0.98"
+              },
+              {
+                "displayName": "0.99",
+                "value": "0.99"
+              },
+              {
+                "displayName": "0.995",
+                "value": "0.995"
+              },
+              {
+                "displayName": "0.999",
+                "value": "0.999"
+              }
+            ]
+          }
+        },
+        "confInterval2": {
+          "displayName": "Confidence level #2",
+          "description": "Select additional confidence interval",
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "0",
+                "value": "0"
+              },
+              {
+                "displayName": "0.2",
+                "value": "0.2"
+              },
+              {
+                "displayName": "0.4",
+                "value": "0.4"
+              },
+              {
+                "displayName": "0.5",
+                "value": "0.5"
+              },
+              {
+                "displayName": "0.75",
+                "value": "0.75"
+              },
+              {
+                "displayName": "0.8",
+                "value": "0.8"
+              },
+              {
+                "displayName": "0.9",
+                "value": "0.9"
+              },
+              {
+                "displayName": "0.95",
+                "value": "0.95"
+              },
+              {
+                "displayName": "0.975",
+                "value": "0.975"
+              },
+              {
+                "displayName": "0.98",
+                "value": "0.98"
+              },
+              {
+                "displayName": "0.99",
+                "value": "0.99"
+              },
+              {
+                "displayName": "0.995",
+                "value": "0.995"
+              },
+              {
+                "displayName": "0.999",
+                "value": "0.999"
+              }
+            ]
+          }
+        }
+      }
+    },
+     "settings_graph_params":{
+        "displayName": "Graphical parameters",
+        "properties": {
+          
+            "dataCol": {
+              "displayName": "Actual data color",
+              "type": { "fill": { "solid": { "color": true }}}
+            }, 
+              "forecastCol": {
+              "displayName": "Forecast data color",
+              "type": { "fill": { "solid": { "color": true }}}
+            },
+              "fittedCol": {
+              "displayName": "Fitted data color",
+              "type": { "fill": { "solid": { "color": true }}}
+            },
+            "percentile":{
+            "displayName": "Opacity",
+            "type": {
+              "numeric": true
+            }
+            },
+            "weight":{
+            "displayName": "Line width",
+            "type": {
+              "numeric": true
+            }
+            },
+             "showFromTo": {
+          "displayName": "Show subset of dates",
+          "description": "Show subset of dates",
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "all",
+                "value": "all"
+              },
+              {
+                "displayName": "last hour",
+                "value": "hour"
+              },
+              {
+                "displayName": "last day",
+                "value": "mday"
+              },
+              {
+                "displayName": "last week",
+                "value": "week"
+              },
+              {
+                "displayName": "last month",
+                "value": "mon"
+              },
+              {
+                "displayName": "last year",
+                "value": "year"
+              }
+            ]
+          }
+        },
+        "refPointShift":{
+            "displayName": "Shift reported period (in hours)",
+            "description": "Value in hours used to shift reported period, for example: 4 if nominal day starts at 4 am, or 24 if nominal week starts at Monday",
+            "type": {
+              "numeric": true
+            }
+          },
+            "showInPlotFitted":{
+            "displayName": "Show fitted values",
+            "description": "Show fitted values",
+            "type": {
+              "bool": true
+            }
+          },
+          "userFormatX": {
+          "displayName": "Dates format on axis",
+          "description": "Format of X-ticks",
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "auto",
+                "value": "auto"
+              },
+              {
+                "displayName": "2001",
+                "value": "%Y"
+              },
+              {
+                "displayName": "12/01",
+                "value": "%m/%y"
+              },
+              {
+                "displayName": "Jan 01, 2010",
+                "value": "%b %d, %Y"
+              },
+              {
+                "displayName": "01/20/10",
+                "value": "%m/%d/%y"
+              },
+              {
+                "displayName": "20/01/10",
+                "value": "%d/%m/%y"
+              },
+              {
+                "displayName": "Jan 01",
+                "value": "%b %d"
+              },
+              {
+                "displayName": "01/20/10 12:00",
+                "value": "%m/%d/%y %H:%M"
+              },
+              {
+                "displayName": "Jan 01 12:00",
+                "value": "%b %d, %H:%M"
+              },
+              {
+                "displayName": "12:00",
+                "value": "%H:%M" 
+              },
+              {
+                "displayName": "2010,Q1",
+                "value": "%Y,Q%q"
+              },
+              {
+                "displayName": "Thu Jan 20",
+                "value": "%a %b %d"
+              }
+            ]
+          }
+        }
+
+        }
+    },
+    "settings_axes_params":{
+        "displayName": "Labels and axes",
+        "properties": {
+
+           "textSize":{
+            "displayName": "Labels font size",
+			      "description": "Labels font size",
+            "type": {
+              "numeric": true
+              }
+            },
+            "labelsTextCol": {
+              "displayName": "Labels color",
+              "type": { "fill": { "solid": { "color": true }}}
+            },
+        
+        "showScientificY":{
+            "displayName": "Scientific view Y-axis",
+			      "description": "Scientific view Y-axis",
+            "type": {
+              "bool": true
+              }
+            }, 
+          "userFormatX": {
+          "displayName": "Dates format on X-axis",
+          "description": "Format of X-ticks",
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "auto",
+                "value": "auto"
+              },
+              {
+                "displayName": "2001",
+                "value": "%Y"
+              },
+              {
+                "displayName": "12/01",
+                "value": "%m/%y"
+              },
+              {
+                "displayName": "Jan 01, 2010",
+                "value": "%b %d, %Y"
+              },
+              {
+                "displayName": "01/20/10",
+                "value": "%m/%d/%y"
+              },
+              {
+                "displayName": "20/01/10",
+                "value": "%d/%m/%y"
+              },
+              {
+                "displayName": "Jan 01",
+                "value": "%b %d"
+              },
+              {
+                "displayName": "01/20/10 12:00",
+                "value": "%m/%d/%y %H:%M"
+              },
+              {
+                "displayName": "Jan 01 12:00",
+                "value": "%b %d, %H:%M"
+              },
+              {
+                "displayName": "12:00",
+                "value": "%H:%M" 
+              },
+              {
+                "displayName": "2010,Q1",
+                "value": "%Y,Q%q"
+              },
+              {
+                "displayName": "Thu Jan 20",
+                "value": "%a %b %d"
+              }
+            ]
+          }
+        }             
+        }
+    },
+     "settings_additional_params":{
+        "displayName": "Advanced parameters",
+        "properties": {
+        
+           "algModeFast":{
+            "displayName": "Fast execution mode",
+			      "description": "Relatively fast non-accurate execution mode",
+            "type": {
+              "bool": true
+              }
+            }, 
+             "valuesNonNegative":{
+            "displayName": "Positive data values",
+			      "description": "Set negative prediction to zero",
+            "type": {
+              "bool": true
+              }
+            },
+             "useParProc":{
+            "displayName": "Parallel processing",
+			      "description": "Use parallel processing, if possible",
+            "type": {
+              "bool": true
+              }
+            }                      
+        }
+    },
+     "settings_info_params":{
+        "displayName": "Info parameters",
+        "properties": {
+           "textSize":{
+            "displayName": "Font size",
+			      "description": "Font size used to show information",
+            "type": {
+              "numeric": true
+              }
+            },
+            "infoTextCol": {
+              "displayName": "Font color",
+              "type": { "fill": { "solid": { "color": true }}}
+            },
+             "numDigitsInfo": {
+          "displayName": "Number of digits",
+          "description": "Number of digits to the right of the decimal point",
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "0",
+                "value": "0"
+              },
+              {
+                "displayName": "1",
+                "value": "1"
+              },
+              {
+                "displayName": "2",
+                "value": "2"
+              },
+              {
+                "displayName": "3",
+                "value": "3"
+              }
+            ]
+          }
+        },
+         "whichInfo": {
+          "displayName": "Information content",
+          "description": "Select one of the items: information criterion (AIC), cumulative forecast value (actual + predicted), or TBATS method",
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "none",
+                "value": "none"
+              },
+              {
+                "displayName": "AIC",
+                "value": "AIC"
+              },
+              {
+                "displayName": "cumulative",
+                "value": "cumulative"
+              },
+              {
+                "displayName": "method",
+                "value": "method"
+              }
+            ]
+          }
+        }
+        }
+    }
+
+
+
+  },
+  "suppressDefaultTitle": true
+}
