@@ -67,12 +67,12 @@
       
         "forecastLength": { 
           "displayName": "Forecast length",
-          "description": "Maximal number of data points to predict", 
+          "description": "Maximum number of data points to predict", 
           "type": { "numeric": true } 
           },
         "targetSeason1": {
               "displayName": "Seasonal factor #1",
-              "description": "Specify, if time series is influenced by known seasonal factors. Non compatible seasonality will be ignored",
+              "description": "Seasonal factor that influences the time series. Non-compatible seasonality is ignored.",
               "type": {
                 "enumeration": [
                   {
@@ -112,7 +112,7 @@
             },
             "targetSeason2": {
               "displayName": "Seasonal factor #2",
-              "description": "Specify, if time series is influenced by known seasonal factors. Non compatible seasonality will be ignored",
+              "description": "Seasonal factor that influences the time series. Non-compatible seasonality is ignored.",
               "type": {
                 "enumeration": [
                   {
@@ -152,12 +152,12 @@
             },
           "freq1": { 
           "displayName": "Seasonal period #1",
-          "description": "Number of data points in smaller season period. For example, for time series with 15 minutes interval and daily seasonality the value is 96.", 
+          "description": "Number of data points for smaller season period. Example: for a time series with a 15 minute interval, and daily seasonality, the value is 96.", 
           "type": { "numeric": true } 
           },
            "freq2": { 
           "displayName": "Seasonal period #2",
-          "description": "Number of data points in larger season period. For example, for time series with 15 minutes interval and weekly seasonality the value is 672.", 
+          "description": "Number of data points for larger season period. Example: for a time series with a 15 minute interval, and daily seasonality, the value is 672.", 
           "type": { "numeric": true } 
           }
       }
@@ -167,7 +167,7 @@
         "properties": {
         "confInterval1": {
           "displayName": "Confidence level",
-          "description": "Select first confidence interval",
+          "description": "First confidence interval",
           "type": {
             "enumeration": [
               {
@@ -227,7 +227,7 @@
         },
         "confInterval2": {
           "displayName": "Confidence level #2",
-          "description": "Select additional confidence interval",
+          "description": "Additional confidence interval",
           "type": {
             "enumeration": [
               {
@@ -349,7 +349,7 @@
         },
         "refPointShift":{
             "displayName": "Shift reported period (in hours)",
-            "description": "Value in hours used to shift reported period, for example: 4 if nominal day starts at 4 am, or 24 if nominal week starts at Monday",
+            "description": "Value, in hours, used to shift the reported period. Examples: value is 4 if a daily starts at 4am; value is 24 is weekly starts on Monday.",
             "type": {
               "numeric": true
             }
@@ -507,7 +507,7 @@
         
            "algModeFast":{
             "displayName": "Fast execution mode",
-			      "description": "Relatively fast non-accurate execution mode",
+			      "description": "Runs faster, but with less accuracy",
             "type": {
               "bool": true
               }
@@ -544,7 +544,7 @@
             },
              "numDigitsInfo": {
           "displayName": "Number of digits",
-          "description": "Number of digits to the right of the decimal point",
+          "description": "Digits to display, to the right of the decimal",
           "type": {
             "enumeration": [
               {
@@ -568,7 +568,7 @@
         },
          "whichInfo": {
           "displayName": "Information content",
-          "description": "Select one of the items: information criterion (AIC), cumulative forecast value (actual + predicted), or TBATS method",
+          "description": "Select one: information criterion (AIC), cumulative forecast value (actual + predicted), or TBATS method",
           "type": {
             "enumeration": [
               {
