@@ -1,0 +1,28 @@
+Imagine that your data is influenced by two seasonality factors. For example, an ice-cream seller expects a certain seasonality pattern that fluctuates daily, and weekly. 
+
+The TBATS model is a time-series model for series that exhibit multiple seasonalities.
+
+You can control the visual attributes of the TBATS model to suit your needs.
+
+
+Here’s how it works: 
+[#LI] Define the required "Date" field (of type "date" or "date/time") [/#LI]
+[#LI] Define the required "Value" field (numeric) [/#LI]
+[#LI] Select the required seasonalities in "Forecasting settings" [/#LI]
+[#LI] Use numerous formatting controls to refine the visual appearance of the plot [/#LI]
+
+R package dependencies (which are auto-installed): zoo, scales, reshape2, ggplot2, plotly, forecast, lubridate, htmlwidgets, XML
+Supports R versions: R 3.4.0, R 3.3.3, R 3.3.2, MRO 3.2.2 
+
+Warning: the optimization procedure for TBATS can be time consuming. It’s recommended only when your data exhibits multiple seasonalities. 
+NEW: support for tooltips on hover and selection.
+
+
+This is an open source visual. Get the code from GitHub: 
+https://github.com/Microsoft/powerbi-visuals-forecast-tbats
+
+The full version of this visual (supported in Power BI Desktop only) is available from the following location: 
+https://github.com/Microsoft/powerbi-visuals-forecast-tbats/tree/full
+
+ 
+
