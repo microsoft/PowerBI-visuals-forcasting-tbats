@@ -1,0 +1,71 @@
+Basic Instructions 
+
+TBATS forecasting is one ot of several custom visuals in Power BI used for time series data analysis. 
+You may find that its interface is very similar to the inteface of  Forecasting, ARIMA Forecasting and Time Series Decomposition. 
+
+Here’s how it works: 
+
+*  Define the required "Date" field of type "date" or "date/time". 
+This visual supposes that time series are equally spaced. 
+
+*  Define the required "Value" field (numeric)
+  
+* Select the required seasonality in "Forecasting settings". 
+You may select up to two seasonality factors out of existing list (hour, day, week etc.) or to specify the number of samples per season explicitely. 
+
+*  Use numerous formatting controls to refine the visual appearance of the plot: confidence intervals, colors, fonts, labels formatting and information content.
+
+
+
+Advanced Options:
+
+*  Graphical parameters > Show subset of dates 
+Allows you to show only last time period (day, week, month). It does not influence the forcasting values. 
+
+*  Graphical parameters > Shift reported period 
+Usually this option is is used together with aforementioned parameter, if nominal period is shifted. For example, use 6 to start "day" at 6 am.
+
+* Info parameters > Information content 
+Used to present additional information in the title of the plot, use one of three options: 
+(1) AIC -  Akaike Information Criterion is the estimator for relative quality of statistical model. It deals with the trade-off between the goodness of fit of the model and the complexity of the model. Smaller criterion corresponds for better quality of the model. 
+(2) cumulative - Cumulative forecast value (actual + predicted) 
+(3) method - TBATS fitted model.
+The fitted model is designated TBATS(omega, {p,q}, phi, {<m1,k1>,<m2,k2>}) where omega is the Box-Cox parameter and phi is the damping parameter; 
+the error is modelled as an ARMA(p,q) process and m1,m2 are the seasonal periods used in the model and k1,k2 are the corresponding number of Fourier terms used for each seasonality.
+Recommended to read more in TBATS documentation https://www.rdocumentation.org/packages/forecast/versions/8.1/topics/tbats
+
+* Advanced parameters > Positive data values 
+Turn this option on if the forecast value can not be negative (like sales). 
+
+* Open source 
+
+Get the code from GitHub: 
+https://github.com/Microsoft/powerbi-visuals-forecast-tbats
+
+The full version of this visual (supported in Power BI Desktop only) is available from the following location: 
+https://github.com/Microsoft/powerbi-visuals-forecast-tbats/tree/full
+The full version supports 
+- Using parallel processing 
+- Full optimization scheme 
+
+
+Tips & Tricks
+
+* This visual supposes that time series are equally spaced. Please avoid using unevenly spaced time series. 
+
+* The default version of visual constraints the TBATS optimization scheme. We recommend to use the full version (available on github) for advanced experiments. 
+
+* The TBATS model is a time-series model for series that exhibit multiple seasonalities. 
+We recommend to give a try for other approached like exponential smoothing forecating and ARIMA forecasting if you data exhibits single seasonality. 
+
+* TBATS model is based on time and space consuming advanced algorithm. In case that you experience unusual long delays or memory issues:
+	- reduce the forecasting length 
+	- reduce the size of input dataset 
+	
+
+	
+
+
+
+
+
