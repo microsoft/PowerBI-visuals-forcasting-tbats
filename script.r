@@ -26,8 +26,6 @@
 # REFERENCES: https://robjhyndman.com/papers/ComplexSeasonality.pdf
 
 
-
-
 Sys.setlocale("LC_ALL","English") # Internationalization 
 
 ############ User Parameters #########
