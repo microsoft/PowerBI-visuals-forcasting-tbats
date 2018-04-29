@@ -354,3 +354,5 @@ getFrequency1 = function(parsed_dates, values, tS, f)
     myFreq = findFreqFromDates1(parsed_dates, targetS = "auto")
   return(myFreq)
 }
+
+

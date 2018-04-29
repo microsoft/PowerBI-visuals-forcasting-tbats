@@ -25,17 +25,73 @@
  */
 
 module powerbi.extensibility.visual {
-    "use strict";
+  "use strict";
 
-    import DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
+  import DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
 
-   export class VisualSettings extends DataViewObjectsParser {
-      public rcv_script: rcv_scriptSettings = new rcv_scriptSettings();
-      }
+  export function inMinMax(a: number, mi: number, ma: number) {
+    if (a < mi)
+      return mi;
+    if (a > ma)
+      return ma;
+    return a;
+  }
+  export class VisualSettings extends DataViewObjectsParser {
+    // public rcv_script: rcv_scriptSettings = new rcv_scriptSettings();
+    public settings_forecastPlot_params: VisualSettingsForecastPlotParams = new VisualSettingsForecastPlotParams();
+    public settings_conf_params: VisualSettingsConfParams = new VisualSettingsConfParams();
+    public settings_graph_params: VisualGraphParams = new VisualGraphParams();
+    public settings_additional_params: VisualAdditionalParams = new VisualAdditionalParams();
+    public settings_info_params: VisualInfoParams = new VisualInfoParams();
+    public settings_axes_params: VisualAxesParams = new VisualAxesParams();
+    public settings_export_params: VisualSettingsExportParams = new VisualSettingsExportParams();
 
-    export class rcv_scriptSettings {
-     // undefined
-      public provider     // undefined
-      public source     }
+  }
+
+  export class VisualSettingsForecastPlotParams {
+    public forecastLength: number = 500;
+    public freq1: number = 1;
+    public freq2: number = 1;
+    public targetSeason1: string = "none";
+    public targetSeason2: string = "none";
+  }
+  export class VisualSettingsConfParams {
+    public confInterval1: string = "0.5";
+    public confInterval2: string = "0.995";
+  }
+  export class VisualGraphParams {
+    public dataCol: string = "orange";
+    public forecastCol: string = "red";
+    public fittedCol: string = "green";
+    public percentile: number = 40;
+    public weight: number = 10;
+    public showFromTo: string = "all";
+    public refPointShift: number = 0;
+    public showInPlotFitted: boolean = false;
+  }
+  export class VisualAdditionalParams {
+    public algModeFast: boolean = true;
+    public valuesNonNegative: boolean = false;
+    public useParProc: boolean = false;
+  }
+  export class VisualInfoParams {
+    public textSize: number = 10;
+    public infoTextCol: string = "gray50";
+    public numDigitsInfo: string = "0";
+    public whichInfo: string = "none";
+  }
+  export class VisualAxesParams {
+    public showScientificY: boolean = false;
+    public textSize: number = 12;
+    public labelsTextCol: string = "black";
+    public userFormatX: string = "auto";
+  }
+  export class VisualSettingsExportParams {
+    public show: boolean = false;
+    public limitExportSize: string = "10000";
+    public method: string = "copy";
+  }
+
+
 
 }

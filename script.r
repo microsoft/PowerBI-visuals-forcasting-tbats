@@ -26,6 +26,16 @@
 # REFERENCES: https://robjhyndman.com/papers/ComplexSeasonality.pdf
 
 
+#DEBUG in RStudio
+fileRda = "C:/Users/boefraty/projects/PBI/R/tempData.Rda"
+if(file.exists(dirname(fileRda)))
+{
+  if(Sys.getenv("RSTUDIO")!="")
+    load(file= fileRda)
+  else
+    save(list = ls(all.names = TRUE), file=fileRda)
+}
+
 Sys.setlocale("LC_ALL","English") # Internationalization 
 
 ############ User Parameters #########
@@ -250,6 +260,25 @@ infoTextCol = "gray50"
 if(exists("settings_info_params_infoTextCol"))
   infoTextCol = settings_info_params_infoTextCol
 
+##PBI_PARAM: export out data to HTML?
+#Type:logical, Default:FALSE, Range:NA, PossibleValues:NA, Remarks: NA
+keepOutData = FALSE
+if(exists("settings_export_params_show"))
+  keepOutData = settings_export_params_show 
+
+##PBI_PARAM: method of export interface
+#Type: string , Default:"copy",  Range:NA, PossibleValues:"copy", "download",  Remarks: NA
+exportMethod = "copy"
+if(exists("settings_export_params_method"))
+  exportMethod = settings_export_params_method 
+
+##PBI_PARAM: limit the out table exported
+#Type: string , Default:1000,  Range:NA, PossibleValues:"1000", "10000", Inf,  Remarks: NA
+limitExportSize = 10000
+if(exists("settings_export_params_limitExportSize"))
+  limitExportSize = as.numeric(settings_export_params_limitExportSize)
+
+
 ###############Internal parameters definitions#################
 
 #PBI_PARAM Minimal number of points
@@ -283,7 +312,9 @@ transparencyConfInterval = 0.3
 
 source('./r_files/utils.r')
 source('./r_files/flatten_HTML.r')
+
 libraryRequireInstall("plotly")
+libraryRequireInstall("caTools")
 
 ###############Upfront input correctness validations (where possible)#################
 
@@ -335,6 +366,8 @@ if(!exists("Date") || !exists("Value"))
     }
   }
 }
+
+
 
 ##############Main Visualization script###########
 
@@ -622,8 +655,33 @@ p <- config(p, staticPlot = FALSE, editable = FALSE, sendData = FALSE, showLink 
 
 internalSaveWidget(p, 'out.html')
 
+if(keepOutData)
+{
+  padNA1 = rep(NA,length(x1))
+  padNA2 = rep(NA,length(x2))
+  if(!exists("lower1"))
+    lower1 = lower2 = upper1 = upper2 = padNA2;
+  
+  
+  lower1 = c(padNA1,lower1)
+  lower2 = c(padNA1,lower2)
+  upper1 = c(padNA1,upper1)
+  upper2 = c(padNA1,upper2)
+  
+  exportDF = data.frame(Date = as.character(x_with_f_exist),Value = c(y1,y2),Fitted = c(y3,padNA2),
+                        lower1 = lower1,
+                        lower2 = lower2,
+                        upper1 = upper1,
+                        upper2 = upper2)
+  
+  colnames(exportDF)[c(1,2)] = c(labTime,labValue)
+  
+  KeepOutDataInHTML(df = exportDF, htmlFile = 'out.html', exportMethod = exportMethod, limitExportSize = limitExportSize)
+}
+
+
 ####################################################
 # #display in R studio
-# if(Sys.getenv("RSTUDIO")!="")
-#   print(p)
+if(Sys.getenv("RSTUDIO")!="")
+  print(p)
 
