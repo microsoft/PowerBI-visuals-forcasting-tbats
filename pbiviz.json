@@ -2,7 +2,7 @@
   "visual": {
     "name": "PowerBI-visuals-forcasting-TBATS",
     "displayName": "Forecasting TBATS",
-    "guid": "PBI_CV_8EDDC07B_TBATS_WORK",
+    "guid": "PBI_CV_8EDDC07B_TBATS",
     "visualClassName": "Visual",
     "version": "1.0.1",
     "description": "The TBATS model is a time series model for series exhibiting multiple seasonalities.",
