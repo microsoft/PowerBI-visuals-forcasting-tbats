@@ -47,58 +47,11 @@ module powerbi.extensibility.visual {
     // in order to improve the performance, one can update the <head> only in the initial rendering.
     // set to 'true' if you are using different packages to create the widgets
     const updateHTMLHead: boolean = false;
-
     const renderVisualUpdateType: number[] = [
         VisualUpdateType.Resize,
         VisualUpdateType.ResizeEnd,
         VisualUpdateType.Resize + VisualUpdateType.ResizeEnd
     ];
-
-// USER 
-    interface VisualSettingsForecastPlotParams {
-        show: boolean;
-        forecastLength: number;
-        freq1: number;
-        freq2: number;
-        targetSeason1: string;
-        targetSeason2: string;
-    }
-
-    interface VisualSettingsConfParams {
-        confInterval1: string;
-        confInterval2: string;
-    }
-    interface VisualGraphParams {
-        show: boolean;
-        dataCol: string;
-        forecastCol: string;
-        fittedCol: string;
-        percentile: number;
-        weight: number;
-        showFromTo: string;
-        refPointShift: number;
-        showInPlotFitted: boolean;
-    }
-    interface VisualAdditionalParams {
-        algModeFast: boolean;
-        valuesNonNegative: boolean;
-        useParProc: boolean;
-    }
-    interface VisualInfoParams {
-        textSize: number;
-        infoTextCol: string;
-        numDigitsInfo: string;
-        whichInfo: string;
-
-    }
-    interface VisualAxesParams {
-        showScientificY: boolean;
-        textSize: number;
-        labelsTextCol: string;
-        userFormatX: string;
-    }
-// USER - (END)
-
 
     export class Visual implements IVisual {
         private rootElement: HTMLElement;
@@ -106,69 +59,12 @@ module powerbi.extensibility.visual {
         private bodyNodes: Node[];
         private settings: VisualSettings;
 
-// USER 
-        private settings_forecastPlot_params: VisualSettingsForecastPlotParams;
-        private settings_conf_params: VisualSettingsConfParams;
-        private settings_graph_params: VisualGraphParams;
-        private settings_additional_params: VisualAdditionalParams;
-        private settings_info_params: VisualInfoParams;
-        private settings_axes_params: VisualAxesParams;
-// USER - (END)
-
         public constructor(options: VisualConstructorOptions) {
             if (options && options.element) {
                 this.rootElement = options.element;
             }
             this.headNodes = [];
             this.bodyNodes = [];
-
-// USER 
-            this.settings_forecastPlot_params = <VisualSettingsForecastPlotParams>{
-                forecastLength: 500,
-                freq1: 1,
-                freq2: 1,
-                targetSeason1: "none",
-                targetSeason2: "none"
-            };
-
-            this.settings_conf_params = <VisualSettingsConfParams>{
-                confInterval1: "0.5",
-                confInterval2: "0.995",
-            };
-
-            this.settings_graph_params = <VisualGraphParams>{
-
-                dataCol: "orange",
-                forecastCol: "red",
-                fittedCol: "green",
-                percentile: 40,
-                weight: 10,
-                showFromTo: "all",
-                refPointShift: 0,
-                showInPlotFitted: false,
-
-
-            };
-
-            this.settings_additional_params = <VisualAdditionalParams>{
-                valuesNonNegative: false,
-                algModeFast: false,
-                useParProc: false
-            };
-
-            this.settings_info_params = <VisualInfoParams>{
-                textSize: 10,
-                infoTextCol: "gray50",
-                numDigitsInfo: "0",
-                whichInfo: "none"
-            };
-            this.settings_axes_params = <VisualAxesParams>{
-                showScientificY: false,
-                textSize: 12,
-                labelsTextCol: "black",
-                userFormatX: "auto"
-            };
-// USER - (END)
         }
 
         public update(options: VisualUpdateOptions): void {
@@ -183,9 +79,7 @@ module powerbi.extensibility.visual {
             }
             const dataView: DataView = options.dataViews[0];
             this.settings = Visual.parseSettings(dataView);
-// USER 
-            this.updateObjects(dataView.metadata.objects);
-// USER - (END)
+
             let payloadBase64: string = null;
             if (dataView.scriptResult && dataView.scriptResult.payloadBase64) {
                 payloadBase64 = dataView.scriptResult.payloadBase64;
@@ -255,77 +149,15 @@ module powerbi.extensibility.visual {
             return VisualSettings.parse(dataView) as VisualSettings;
         }
 
-
-        //RVIZ_IN_PBI_GUIDE:BEGIN:Added to create HTML-based 
-        /**
-         * This function gets called by the update function above. You should read the new values of the properties into 
-         * your settings object so you can use the new value in the enumerateObjectInstances function below.
-         * 
-         * Below is a code snippet demonstrating how to expose a single property called "lineColor" from the object called "settings"
-         * This object and property should be first defined in the capabilities.json file in the objects section.
-         * In this code we get the property value from the objects (and have a default value in case the property is undefined)
-         */
-        public updateObjects(objects: DataViewObjects) {
-
-            this.settings_forecastPlot_params = <VisualSettingsForecastPlotParams>{
-                forecastLength: getValue<number>(objects, 'settings_forecastPlot_params', 'forecastLength', 500),
-                freq1: getValue<number>(objects, 'settings_forecastPlot_params', 'freq1', 1),
-                freq2: getValue<number>(objects, 'settings_forecastPlot_params', 'freq2', 1),
-                targetSeason1: getValue<string>(objects, 'settings_forecastPlot_params', 'targetSeason1',"none"),
-                targetSeason2: getValue<string>(objects, 'settings_forecastPlot_params', 'targetSeason2',"none")
-            };
-
-           this.settings_conf_params = <VisualSettingsConfParams>{
-                confInterval1: getValue<string>(objects, 'settings_conf_params', 'confInterval1', "0.5"),
-                confInterval2: getValue<string>(objects, 'settings_conf_params', 'confInterval2', "0.995"),
-
-            }
-            this.settings_graph_params = <VisualGraphParams>{
-                dataCol: getValue<string>(objects, 'settings_graph_params', 'dataCol', "orange"),
-                forecastCol: getValue<string>(objects, 'settings_graph_params', 'forecastCol', "red"),
-                fittedCol: getValue<string>(objects, 'settings_graph_params', 'fittedCol', "green"),
-                percentile: getValue<number>(objects, 'settings_graph_params', 'percentile', 40),
-                weight: getValue<number>(objects, 'settings_graph_params', 'weight', 10),
-                showFromTo: getValue<string>(objects, 'settings_graph_params', 'showFromTo', "all"),
-                refPointShift: getValue<number>(objects, 'settings_graph_params', 'refPointShift', 0),
-                showInPlotFitted: getValue<boolean>(objects, 'settings_graph_params', 'showInPlotFitted', false),
-
-
-            }
-            this.settings_additional_params = <VisualAdditionalParams>{
-                algModeFast: getValue<boolean>(objects, 'settings_additional_params', 'algModeFast', false),
-                valuesNonNegative: getValue<boolean>(objects, 'settings_additional_params', 'valuesNonNegative', false),
-                useParProc: getValue<boolean>(objects, 'settings_additional_params', 'useParProc', false)
-
-            }
-            this.settings_info_params = <VisualInfoParams>{
-
-                textSize: getValue<number>(objects, 'settings_info_params', 'textSize', 10),
-                infoTextCol: getValue<string>(objects, 'settings_info_params', 'infoTextCol', "gray50"),
-                numDigitsInfo: getValue<string>(objects, 'settings_info_params', 'numDigitsInfo', "0"),
-                whichInfo: getValue<string>(objects, 'settings_info_params', 'whichInfo', "none"),
-                
-            }
-            this.settings_axes_params = <VisualAxesParams>{
-                showScientificY: getValue<boolean>(objects, 'settings_axes_params', 'showScientificY', false),
-                textSize: getValue<number>(objects, 'settings_axes_params', 'textSize', 12),
-                labelsTextCol: getValue<string>(objects, 'settings_axes_params', 'labelsTextCol', "black"),
-                userFormatX: getValue<string>(objects, 'settings_axes_params', 'userFormatX', "auto")
-            }
-
-
-        }
-        //RVIZ_IN_PBI_GUIDE:END:Added to create HTML-based 
-
-
-
-
-
-        /** 
-         * This function gets called for each of the objects defined in the capabilities files and allows you to select which of the 
-         * objects and properties you want to expose to the users in the property pane.
-         * 
-         */
+        // /** 
+        //  * This function gets called for each of the objects defined in the capabilities files and allows you to select which of the 
+        //  * objects and properties you want to expose to the users in the property pane.
+        //  * 
+        //  */
+        // public enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions):
+        //     VisualObjectInstance[] | VisualObjectInstanceEnumerationObject {
+        //     return VisualSettings.enumerateObjectInstances(this.settings || VisualSettings.getDefault(), options);
+        // }
         public enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions):
             VisualObjectInstance[] | VisualObjectInstanceEnumerationObject {
 
@@ -339,32 +171,30 @@ module powerbi.extensibility.visual {
                     objectEnumeration.push({
                         objectName: objectName,
                         properties: {
-                            forecastLength: Math.round(inMinMax(this.settings_forecastPlot_params.forecastLength, 1, 1000000)),
-                            targetSeason1: this.settings_forecastPlot_params.targetSeason1,
-                            targetSeason2: this.settings_forecastPlot_params.targetSeason2
+                            forecastLength: Math.round(inMinMax(this.settings.settings_forecastPlot_params.forecastLength, 1, 1000000)),
+                            targetSeason1: this.settings.settings_forecastPlot_params.targetSeason1,
+                            targetSeason2: this.settings.settings_forecastPlot_params.targetSeason2
                         },
                         selector: null
                     });
 
-                    if(this.settings_forecastPlot_params.targetSeason1 === "manual")
-                    {
-                     objectEnumeration.push({
-                        objectName: objectName,
-                        properties: {
-                            freq1: Math.round(inMinMax(this.settings_forecastPlot_params.freq1, 1, 1000000))
-                        },
-                        selector: null
-                    });
+                    if (this.settings.settings_forecastPlot_params.targetSeason1 === "manual") {
+                        objectEnumeration.push({
+                            objectName: objectName,
+                            properties: {
+                                freq1: Math.round(inMinMax(this.settings.settings_forecastPlot_params.freq1, 1, 1000000))
+                            },
+                            selector: null
+                        });
                     }
-                if(this.settings_forecastPlot_params.targetSeason2 === "manual")
-                    {
-                    objectEnumeration.push({
-                        objectName: objectName,
-                        properties: {
-                            freq2: Math.round(inMinMax(this.settings_forecastPlot_params.freq2, 1, 1000000))
-                        },
-                        selector: null
-                    });
+                    if (this.settings.settings_forecastPlot_params.targetSeason2 === "manual") {
+                        objectEnumeration.push({
+                            objectName: objectName,
+                            properties: {
+                                freq2: Math.round(inMinMax(this.settings.settings_forecastPlot_params.freq2, 1, 1000000))
+                            },
+                            selector: null
+                        });
                     }
                     break;
 
@@ -372,8 +202,8 @@ module powerbi.extensibility.visual {
                     objectEnumeration.push({
                         objectName: objectName,
                         properties: {
-                            confInterval1: this.settings_conf_params.confInterval1,
-                            confInterval2: this.settings_conf_params.confInterval2
+                            confInterval1: this.settings.settings_conf_params.confInterval1,
+                            confInterval2: this.settings.settings_conf_params.confInterval2
                         },
                         selector: null
                     });
@@ -383,32 +213,32 @@ module powerbi.extensibility.visual {
                     objectEnumeration.push({
                         objectName: objectName,
                         properties: {
-                            percentile: this.settings_graph_params.percentile,
-                            weight: this.settings_graph_params.weight,
-                            dataCol: this.settings_graph_params.dataCol,
-                            forecastCol: this.settings_graph_params.forecastCol,
-                            showInPlotFitted: this.settings_graph_params.showInPlotFitted
+                            percentile: this.settings.settings_graph_params.percentile,
+                            weight: this.settings.settings_graph_params.weight,
+                            dataCol: this.settings.settings_graph_params.dataCol,
+                            forecastCol: this.settings.settings_graph_params.forecastCol,
+                            showInPlotFitted: this.settings.settings_graph_params.showInPlotFitted
                         }
                     });
-                    if (this.settings_graph_params.showInPlotFitted) {
+                    if (this.settings.settings_graph_params.showInPlotFitted) {
                         objectEnumeration.push({
                             objectName: objectName,
                             properties: {
-                                fittedCol: this.settings_graph_params.fittedCol,//conditioned
+                                fittedCol: this.settings.settings_graph_params.fittedCol,//conditioned
                             }
                         });
                     }
                     objectEnumeration.push({
                         objectName: objectName,
                         properties: {
-                            showFromTo: this.settings_graph_params.showFromTo,
+                            showFromTo: this.settings.settings_graph_params.showFromTo,
                         }
                     });
-                    if (this.settings_graph_params.showFromTo != "all") {
+                    if (this.settings.settings_graph_params.showFromTo != "all") {
                         objectEnumeration.push({
                             objectName: objectName,
                             properties: {
-                                refPointShift: this.settings_graph_params.refPointShift//conditioned
+                                refPointShift: this.settings.settings_graph_params.refPointShift//conditioned
                             },
                             selector: null
                         });
@@ -421,9 +251,9 @@ module powerbi.extensibility.visual {
 
                         objectName: objectName,
                         properties: {
-                            valuesNonNegative: this.settings_additional_params.valuesNonNegative,
-                            algModeFast: this.settings_additional_params.algModeFast,
-                            useParProc: this.settings_additional_params.useParProc
+                            valuesNonNegative: this.settings.settings_additional_params.valuesNonNegative,
+                            algModeFast: this.settings.settings_additional_params.algModeFast,//full mode
+                            useParProc: this.settings.settings_additional_params.useParProc//full mode
 
                         },
                         selector: null
@@ -437,10 +267,10 @@ module powerbi.extensibility.visual {
 
                         objectName: objectName,
                         properties: {
-                            whichInfo: this.settings_info_params.whichInfo,
-                            textSize: this.settings_info_params.textSize,
-                            infoTextCol: this.settings_info_params.infoTextCol,
-                            numDigitsInfo: this.settings_info_params.numDigitsInfo
+                            whichInfo: this.settings.settings_info_params.whichInfo,
+                            textSize: this.settings.settings_info_params.textSize,
+                            infoTextCol: this.settings.settings_info_params.infoTextCol,
+                            numDigitsInfo: this.settings.settings_info_params.numDigitsInfo
                         },
                         selector: null
                     });
@@ -452,21 +282,29 @@ module powerbi.extensibility.visual {
                     objectEnumeration.push({
                         objectName: objectName,
                         properties: {
-                            labelsTextCol: this.settings_axes_params.labelsTextCol,
-                            textSize: this.settings_axes_params.textSize,
-                            userFormatX: this.settings_axes_params.userFormatX,
-                            showScientificY: this.settings_axes_params.showScientificY
+                            labelsTextCol: this.settings.settings_axes_params.labelsTextCol,
+                            textSize: this.settings.settings_axes_params.textSize,
+                            userFormatX: this.settings.settings_axes_params.userFormatX,
+                            showScientificY: this.settings.settings_axes_params.showScientificY
                         },
                         selector: null
                     });
 
                     break;
+                case 'settings_export_params':
+                    objectEnumeration.push({
+                        objectName: objectName,
+                        properties: {
+                            show: this.settings.settings_export_params.show,
+                            limitExportSize: this.settings.settings_export_params.limitExportSize,
+                            method: this.settings.settings_export_params.method
+                        },
+                        selector: null
+                    });
+                    break;
             };
-
-
-
- return objectEnumeration;
-           // return VisualSettings.enumerateObjectInstances(this.settings || VisualSettings.getDefault(), options);
+            // USER - replace this block (END)
+            return objectEnumeration;
         }
     }
 }
