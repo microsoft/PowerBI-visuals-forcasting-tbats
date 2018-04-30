@@ -7,6 +7,7 @@ libraryRequireInstall = function(packageName, ...)
 
 libraryRequireInstall("XML")
 libraryRequireInstall("htmlwidgets")
+libraryRequireInstall("caTools")
 
 internalSaveWidget <- function(widget, fname)
 {
@@ -97,6 +98,23 @@ ReadFullFile <- function(fname)
   return(data)
 }
 
+ConvertDF64encoding = function (df, withoutEncoding = FALSE)
+{
+  header_row <- paste(names(df), collapse=", ")
+  tab <- apply(df, 1, function(x)paste(x, collapse=", "))
+  
+  if(withoutEncoding){
+    text <- paste(c(header_row, tab), collapse="\n")
+    x <- text
+  }
+  else
+  {
+    text <- paste(c(header_row, tab), collapse="\n")
+    x <- caTools::base64encode(text)
+  }
+  return(x)
+}
+
 FindSrcReplacement <- function(str)
 {
   # finds reference to 'plotly' js and replaces with a version from CDN
@@ -128,6 +146,58 @@ ReplaceStrInFile <- function(filenameA,filenameB,wordA,wordB)
   writeLines(tx2, con=filenameB)
 
 }
+
+#ReadFullFileReplaceString
+ReadFullFileReplaceString <- function(fnameIn, fnameOut, sourceString,targetString)
+{
+  if(!file.exists(fnameIn))
+    return(NULL)
+  
+  tx  <- readLines(fnameIn)
+  tx2  <- gsub(pattern = sourceString, replace = targetString, x = tx)
+  writeLines(tx2, con = fnameOut)
+}
+
+KeepOutDataInHTML = function(df, htmlFile = 'out.html', exportMethod = "copy", limitExportSize = 1000)
+{
+  if(nrow(df)>limitExportSize)
+    df = df[1:limitExportSize,]
+  
+  outDataString64 = ConvertDF64encoding(df)
+  
+  linkElem = '\n<a href=""  download="data.csv"  style="position: absolute; top:0px; left: 0px; z-index: 20000;" id = "mydataURL">export</a>\n'
+  updateLinkElem = paste('<script>\n link_element = document.getElementById("mydataURL");link_element.href = outDataString64href;', '\n</script> ', sep =' ')
+  var64 = paste('<script> outDataString64 ="', outDataString64, '"; </script>', sep ="")
+  var64href = paste('<script> outDataString64href ="data:;base64,', outDataString64, '"; </script>', sep ="")
+  
+  buttonElem = '<button style="position: absolute; top:0px; left: 0px; z-index: 20000;"  onclick="myFunctionCopy(1)">copy to clipboard</button>'
+  funcScript = '<script> 
+  function myFunctionCopy(is64) 
+  {
+  const el = document.createElement("textarea");
+  if(is64)
+  {
+  el.value = atob(outDataString64);
+  }
+  else
+  {
+  el.value = outDataStringPlane;
+  }
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand("copy");
+  document.body.removeChild(el);};	
+  </script>'
+  
+  if(exportMethod == "copy")
+    endOfBody = paste(var64,funcScript, buttonElem,'\n</body>',sep ="")
+  else#"download"
+    endOfBody = paste(linkElem,var64, var64href,updateLinkElem,'\n</body>',sep ="")
+  
+  ReadFullFileReplaceString('out.html', 'out.html', '</body>', endOfBody)
+  
+}
+
 
 #################################################
 
