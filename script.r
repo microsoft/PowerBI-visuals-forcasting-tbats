@@ -25,17 +25,6 @@
 #
 # REFERENCES: https://robjhyndman.com/papers/ComplexSeasonality.pdf
 
-
-#DEBUG in RStudio
-fileRda = "C:/Users/boefraty/projects/PBI/R/tempData.Rda"
-if(file.exists(dirname(fileRda)))
-{
-  if(Sys.getenv("RSTUDIO")!="")
-    load(file= fileRda)
-  else
-    save(list = ls(all.names = TRUE), file=fileRda)
-}
-
 Sys.setlocale("LC_ALL","English") # Internationalization 
 
 ############ User Parameters #########
@@ -678,10 +667,3 @@ if(keepOutData)
   
   KeepOutDataInHTML(df = exportDF, htmlFile = 'out.html', exportMethod = exportMethod, limitExportSize = limitExportSize)
 }
-
-
-####################################################
-# #display in R studio
-if(Sys.getenv("RSTUDIO")!="")
-  print(p)
-
