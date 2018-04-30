@@ -252,8 +252,8 @@ module powerbi.extensibility.visual {
                         objectName: objectName,
                         properties: {
                             valuesNonNegative: this.settings.settings_additional_params.valuesNonNegative,
-                            //  algModeFast: this.settings_additional_params.algModeFast,
-                            //  useParProc: this.settings_additional_params.useParProc
+                            //  algModeFast: this.settings_additional_params.algModeFast,//full mode
+                            //  useParProc: this.settings_additional_params.useParProc // full mode
 
                         },
                         selector: null
